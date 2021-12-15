@@ -1,15 +1,9 @@
-import Link from 'next/link'
-import Layout from '../components/Layout'
+import { RecoilRoot } from "recoil";
+import EventDisplay from "../components/EventDisplay";
 
-const IndexPage = () => (
-  <Layout title="Home | Next.js + TypeScript Example">
-    <h1>Hello Next.js 👋</h1>
-    <p>
-      <Link href="/about">
-        <a>About</a>
-      </Link>
-    </p>
-  </Layout>
-)
-
-export default IndexPage
+export default () => (
+  <div>
+    <h1>Messages</h1>
+    <EventDisplay />
+  </div>
+);
