@@ -6,12 +6,12 @@ type Message = {
     data: string;
 };
 
-export default function EventDisplay(): ReactElement {
+export default function ChatMessages(): ReactElement {
     const [messages, setMessages] = React.useState([] as Message[]);
     const [error, setError] = React.useState(false);
 
     useEffect(() => {
-        const sse = new EventSource("./api/spam");
+        const sse = new EventSource("./api/messages");
         let sseMessages: Message[] = [];
 
         sse.onmessage = (e) => {
