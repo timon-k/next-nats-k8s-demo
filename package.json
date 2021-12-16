@@ -1,42 +1,62 @@
 {
-  "private": true,
-  "scripts": {
-    "dev": "next",
-    "build": "next build",
-    "start": "next start",
-    "type-check": "tsc"
-  },
-  "dependencies": {
-    "next": "^12.0.7",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
-  },
-  "devDependencies": {
-    "@next/eslint-plugin-next": "12.0.7",
-    "@types/node": "^16.11.13",
-    "@types/react": "^17.0.2",
-    "@types/react-dom": "^17.0.1",
-    "@typescript-eslint/eslint-plugin": "^5.7.0",
-    "@typescript-eslint/parser": "^5.7.0",
-    "eslint": "^7.32.0",
-    "prettier": "2.5.1",
-    "typescript": "^4.5.4"
-  },
-  "eslintConfig": {
-    "extends": [
-      "next/core-web-vitals"
-    ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-      "ecmaFeatures": {
-        "jsx": true
-      },
-      "ecmaVersion": 12,
-      "sourceType": "module"
+    "private": true,
+    "scripts": {
+        "dev": "next",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint && tsc"
     },
-    "plugins": [
-      "react",
-      "@typescript-eslint"
+    "dependencies": {
+        "next": "^12.0.7",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2"
+    },
+    "devDependencies": {
+        "@next/eslint-plugin-next": "12.0.7",
+        "@types/node": "^16.11.13",
+        "@types/react": "^17.0.2",
+        "@types/react-dom": "^17.0.1",
+        "@typescript-eslint/eslint-plugin": "^5.7.0",
+        "@typescript-eslint/parser": "^5.7.0",
+        "eslint": "^7.32.0",
+        "eslint-config-next": "11.1.2",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-prettier": "^4.0.0",
+        "prettier": "2.5.1",
+        "typescript": "^4.5.4"
+    },
+    "prettier": {
+        "trailingComma": "all",
+        "tabWidth": 4,
+        "singleQuote": false,
+        "printWidth": 100,
+        "endOfLine": "auto"
+    },
+    "eslintConfig": {
+        "parser": "@typescript-eslint/parser",
+        "parserOptions": {
+            "ecmaVersion": 2020,
+            "sourceType": "module",
+            "ecmaFeatures": {
+                "jsx": true
+            }
+        },
+        "settings": {
+            "react": {
+                "version": "detect"
+            }
+        },
+        "extends": [
+            "next",
+            "next/core-web-vitals",
+            "plugin:@typescript-eslint/recommended",
+            "plugin:prettier/recommended"
+        ],
+        "rules": {
+            "eqeqeq": 2
+        }
+    },
+    "eslintIgnore": [
+        ".next"
     ]
-  }
 }
