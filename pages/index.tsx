@@ -1,16 +1,11 @@
 import { ReactElement, useState } from "react";
 import ChatMessages from "../components/ChatMessages";
-
-type LoginData = {
-    username: string | undefined;
-    chatroom: string | undefined;
-};
+import MessageInput from "../components/MessageInput";
+import { LoginData } from "../modules/LoginData";
 
 export default function HomePage(): ReactElement {
-    const [loginData, setLoginData] = useState<LoginData>({
-        username: undefined,
-        chatroom: undefined,
-    });
+    const undefinedLoginData = { username: undefined, chatroom: undefined };
+    const [loginData, setLoginData] = useState<LoginData>(undefinedLoginData);
 
     const [username, setUsername] = useState<string>("");
     const [chatroom, setChatroom] = useState<string>("");
@@ -19,14 +14,22 @@ export default function HomePage(): ReactElement {
         return (
             <div>
                 <h1>
-                    Welcome to chatroom {loginData.chatroom}, {loginData.username}!
+                    Welcome to chatroom {loginData.chatroom}, {loginData.username}! (
+                    <button onClick={() => setLoginData(undefinedLoginData)}>Logout</button>)
                 </h1>
-                <ChatMessages />
+                <MessageInput login={loginData} />
+                <p></p>
+                <ChatMessages login={loginData} />
             </div>
         );
     } else {
         return (
-            <form onSubmit={() => setLoginData({ username: username, chatroom: chatroom })}>
+            <form
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    setLoginData({ username: username, chatroom: chatroom });
+                }}
+            >
                 <h1>Log In</h1>
                 <p>
                     <input
