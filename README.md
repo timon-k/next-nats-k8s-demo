@@ -5,6 +5,9 @@ a backend when the communication with the back-end is done via protobuf messages
 
 To add:
 
-- NATS integration
+- NATS Shutdown Hook
+- NATS JetStream integration
 - Protobuf integration
 - YAML config file
+- K8s deployment
+- HTTP/2 ingress for K8s
