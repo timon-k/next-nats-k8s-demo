@@ -11,6 +11,11 @@ module.exports = {
         nats: {
             server: "nats://127.0.0.1:4222",
         },
+        logging: {
+            transport: {
+                target: "pino-pretty",
+            },
+        },
     },
     publicRuntimeConfig: {
         version,

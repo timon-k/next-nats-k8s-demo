@@ -1,13 +1,6 @@
+import getConfig from "next/config";
 import pino from "pino";
 
-const devMode = process.env.NODE_ENV === "development";
+const { serverRuntimeConfig } = getConfig();
 
-export const logger = pino(
-    devMode
-        ? {
-              transport: {
-                  target: "pino-pretty",
-              },
-          }
-        : {},
-);
+export const logger = pino(serverRuntimeConfig.logging);

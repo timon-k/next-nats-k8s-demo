@@ -1,4 +1,4 @@
-import { connect, NatsConnection, StringCodec, Subscription } from "nats";
+import { connect, NatsConnection, StringCodec } from "nats";
 import getConfig from "next/config";
 import { Message } from "../../modules/Message";
 import { logger } from "./_logger";
