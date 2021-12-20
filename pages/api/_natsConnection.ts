@@ -2,6 +2,7 @@ import { connect, NatsConnection, StringCodec } from "nats";
 import getConfig from "next/config";
 import { Message } from "../../modules/Message";
 import { logger } from "./_logger";
+import { hook } from "./_shutdown";
 
 const { serverRuntimeConfig } = getConfig();
 
@@ -24,6 +25,15 @@ async function connectToNatsServer(): Promise<NatsConnection> {
             logger.error(`Error connecting to NATS server at ${url}: ${err}`);
             throw err;
         }
+
+        hook.add(
+            () => {
+                natsConnection?.drain();
+                natsConnection?.close();
+                logger.info(`Closed NATS connection`);
+            },
+            { name: "nats" },
+        );
     }
 
     return natsConnection;
