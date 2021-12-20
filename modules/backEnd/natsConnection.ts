@@ -1,8 +1,8 @@
 import { connect, NatsConnection, StringCodec } from "nats";
 import getConfig from "next/config";
-import { Message } from "../../modules/Message";
-import { logger } from "./_logger";
-import { hook } from "./_shutdown";
+import { Message } from "../Message";
+import { logger } from "./logger";
+import { hook } from "./shutdown";
 
 const { serverRuntimeConfig } = getConfig();
 
@@ -17,7 +17,7 @@ let natsConnection: NatsConnection | null = null;
 
 async function connectToNatsServer(): Promise<NatsConnection> {
     if (!natsConnection) {
-        const url = serverRuntimeConfig.nats.serverUrl;
+        const url = serverRuntimeConfig.nats.server;
         try {
             natsConnection = await connect({ servers: url });
             logger.info(`Connected to NATS server at ${natsConnection.getServer()}`);
