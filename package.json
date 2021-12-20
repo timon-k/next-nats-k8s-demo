@@ -1,4 +1,6 @@
 {
+    "name": "nats-api-client-sse",
+    "version": "0.1.0",
     "private": true,
     "scripts": {
         "dev": "next",
@@ -7,6 +9,7 @@
         "lint": "next lint && tsc"
     },
     "dependencies": {
+        "js-yaml": "^4.1.0",
         "nats": "^2.4.0",
         "next": "^12.0.7",
         "pino": "^7.5.1",
@@ -16,6 +19,7 @@
     },
     "devDependencies": {
         "@next/eslint-plugin-next": "12.0.7",
+        "@types/js-yaml": "^4.0.5",
         "@types/node": "^16.11.13",
         "@types/react": "^17.0.2",
         "@types/react-dom": "^17.0.1",

@@ -1,6 +1,6 @@
-import getConfig from "next/config";
 import pino from "pino";
+import { getTypedConfig } from "./config";
 
-const { serverRuntimeConfig } = getConfig();
+const { serverRuntimeConfig } = getTypedConfig();
 
 export const logger = pino(serverRuntimeConfig.logging);

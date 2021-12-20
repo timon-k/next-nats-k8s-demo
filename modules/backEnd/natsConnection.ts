@@ -1,10 +1,10 @@
 import { connect, NatsConnection, StringCodec } from "nats";
-import getConfig from "next/config";
 import { Message } from "../Message";
+import { getTypedConfig } from "./config";
 import { logger } from "./logger";
 import { hook } from "./shutdown";
 
-const { serverRuntimeConfig } = getConfig();
+const { serverRuntimeConfig } = getTypedConfig();
 
 /**
  * Since we do not have an explicit server setup/teardown phase, we use a module variable for the

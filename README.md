@@ -5,9 +5,9 @@ a backend when the communication with the back-end is done via protobuf messages
 
 To add:
 
+- YAML config file validation
 - NATS JetStream integration
 - Protobuf integration
-- YAML config file
 - K8s deployment
 - HTTP/2 ingress for K8s
 
@@ -43,3 +43,9 @@ order for the clean shutdown to work.
 #### Config
 
 For the runtime config, there we also use the default next.js runtime config mechanism.
+
+Even the production build will still execute the `next.config.js` file, so we only need to inject
+the applicable runtime configuration into this file.
+
+We use YAML as the general configuration language for the k8s services, so here we parse a YAML
+config file and expose its content through the next.js config.

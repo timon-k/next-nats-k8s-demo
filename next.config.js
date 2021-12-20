@@ -1,4 +1,10 @@
 const { version } = require("./package.json");
+const { load } = require("js-yaml");
+const { readFileSync } = require("fs");
+
+const yamlConfig = load(
+    readFileSync(process.env.SERVICE_CONFIG_FILE ?? "./conf/config.yaml", "utf-8"),
+);
 
 module.exports = {
     reactStrictMode: true,
@@ -7,18 +13,11 @@ module.exports = {
         dirs: ["components", "modules", "pages"],
     },
 
-    serverRuntimeConfig: {
-        nats: {
-            server: "nats://127.0.0.1:4222",
-        },
-        logging: {
-            transport: {
-                target: "pino-pretty",
-            },
-        },
-    },
+    serverRuntimeConfig: yamlConfig.serverRuntimeConfig,
     publicRuntimeConfig: {
-        version,
-        staticFolder: "/static",
+        ...yamlConfig.publicRuntimeConfig,
+        ...{
+            version,
+        },
     },
 };
