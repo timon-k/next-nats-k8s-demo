@@ -19,6 +19,7 @@
 .DS_Store
 *.pem
 *.tsbuildinfo
+*.validator.ts
 
 # debug
 npm-debug.log*

@@ -1,6 +1,7 @@
+import getConfig from "next/config";
 import pino from "pino";
-import { getTypedConfig } from "./config";
+import validate from "./config.validator";
 
-const { serverRuntimeConfig } = getTypedConfig();
+const { serverRuntimeConfig } = validate(getConfig());
 
 export const logger = pino(serverRuntimeConfig.logging);

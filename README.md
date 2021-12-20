@@ -5,7 +5,7 @@ a backend when the communication with the back-end is done via protobuf messages
 
 To add:
 
-- YAML config file validation
+- YAML config file validation (try ajv + vega)
 - NATS JetStream integration
 - Protobuf integration
 - K8s deployment
@@ -49,3 +49,6 @@ the applicable runtime configuration into this file.
 
 We use YAML as the general configuration language for the k8s services, so here we parse a YAML
 config file and expose its content through the next.js config.
+
+To avoid errors in the config file, we also validate the content against the expected type
+structure.

@@ -1,10 +1,11 @@
 import { connect, NatsConnection, StringCodec } from "nats";
+import getConfig from "next/config";
 import { Message } from "../Message";
-import { getTypedConfig } from "./config";
+import validate from "./config.validator";
 import { logger } from "./logger";
 import { hook } from "./shutdown";
 
-const { serverRuntimeConfig } = getTypedConfig();
+const { serverRuntimeConfig } = validate(getConfig());
 
 /**
  * Since we do not have an explicit server setup/teardown phase, we use a module variable for the
