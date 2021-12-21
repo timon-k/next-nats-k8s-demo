@@ -50,5 +50,22 @@ the applicable runtime configuration into this file.
 We use YAML as the general configuration language for the k8s services, so here we parse a YAML
 config file and expose its content through the next.js config.
 
+### Validaton
+
 To avoid errors in the config file, we also validate the content against the expected type
 structure.
+
+We also do validate all other _incoming external data_, but we do _not_ validate the
+browser-to-back-end communication, since this is fully under the control of the next.js app.
+Validating it would create extra runtime overhead and probably should only be done for debugging
+purposes if at all.
+
+### Browser to back-end communication
+
+We use standard REST APIs. For getting the stream of message updates to the browser, we use
+server-sent events (SSE), since these provide automatic reconnects and do not require any extra
+dependencies (both other than WebSockets).
+
+There is a limit of 6 concurrent SSE sessions to the same host in HTTP 1.X, so once we hit that
+limit, we have to set up an HTTP2 ingress in the Kubernetes deployment to bypass this. But for
+now, we only need a single SSE connection per client / browser.
