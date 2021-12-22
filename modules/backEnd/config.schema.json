@@ -1,0 +1,49 @@
+{
+    "title": "TypedNextConfig",
+    "type": "object",
+    "properties": {
+        "serverRuntimeConfig": {
+            "type": "object",
+            "properties": {
+                "nats": {
+                    "type": "object",
+                    "properties": {
+                        "server": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["server"]
+                },
+                "logging": {
+                    "type": "object",
+                    "properties": {
+                        "transport": {
+                            "type": "object",
+                            "properties": {
+                                "target": {
+                                    "type": "string"
+                                }
+                            },
+                            "nullable": true,
+                            "required": ["target"]
+                        }
+                    }
+                }
+            },
+            "required": ["nats", "logging"]
+        },
+        "publicRuntimeConfig": {
+            "type": "object",
+            "properties": {
+                "version": {
+                    "type": "string"
+                },
+                "staticFolder": {
+                    "type": "string"
+                }
+            },
+            "required": ["version", "staticFolder"]
+        }
+    },
+    "required": ["serverRuntimeConfig", "publicRuntimeConfig"]
+}

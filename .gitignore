@@ -19,7 +19,6 @@
 .DS_Store
 *.pem
 *.tsbuildinfo
-*.schema.json
 
 # debug
 npm-debug.log*

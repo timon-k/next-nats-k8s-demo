@@ -2,14 +2,21 @@ import Ajv, { JSONSchemaType } from "ajv";
 import getConfig from "next/config";
 import schema from "./config.schema.json";
 
-/** A typed view on our next.js config object. */
-export type TypedNextConfig = {
+/** A typed view on our next.js config object.
+ *
+ * We could maintain the link between the JSON schema and the typescript interface via
+ * schema-to-code compilers (or vice versa), but ajv is quite picky in its requirements
+ * on the symmetry between schema and typescript (if you use the typed version of ajv).
+ *
+ * See section "JSON valiation" in `README.md`.
+ */
+export interface TypedNextConfig {
     serverRuntimeConfig: {
         nats: {
             server: string;
         };
-
-        /** A subset of pino's LoggerOptions, which can be serialized.
+        /**
+         * A subset of pino's LoggerOptions, which can be serialized.
          *
          * We want to store the config in a file, i.e., config options which are functions are not
          * allowed in our case.
@@ -27,10 +34,10 @@ export type TypedNextConfig = {
         version: string;
         staticFolder: string;
     };
-};
+}
 
 const ajv = new Ajv();
-const validate = ajv.compile(schema.definitions.TypedNextConfig as JSONSchemaType<TypedNextConfig>);
+const validate = ajv.compile(schema as JSONSchemaType<TypedNextConfig>);
 
 export function getTypedConfig(): TypedNextConfig {
     const rawConfig = getConfig();
