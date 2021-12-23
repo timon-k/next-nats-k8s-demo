@@ -29,10 +29,10 @@ export default function ChatMessages(props: { login: LoginData }): ReactElement 
     } else if (messages.length > 0) {
         return (
             <div>
-                {messages.map((item) => (
-                    <>
+                {messages.map((item, index) => (
+                    <div key={index}>
                         <i>{item.username}</i> {item.message} <br />
-                    </>
+                    </div>
                 ))}
             </div>
         );
