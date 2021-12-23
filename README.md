@@ -27,17 +27,9 @@ keep the option to later move the code to serverless environments.
 [hooks]: https://www.npmjs.com/package/shutdown-hook
 
 Unfortunately, next.js installs its own shutdown hooks _before_ we can install ours, in 
-`node_modules/next/dist/bin/next`:
-
-```
-process.on('SIGTERM', ()=>process.exit(0)
-);
-process.on('SIGINT', ()=>process.exit(0)
-);
-``` 
-
-These lines have to be commented out or our `_shutdown.ts` file has to be imported first, in 
-order for the clean shutdown to work.
+`node_modules/next/dist/bin/next`, and those hooks invoke `process.exit(0)`. While this may be
+okay in dev mode, it prevents us from properly cleaning up the running connections in production.
+Therefore, we have bypassed these default handlers in an own startup script `nextHooklessStart.js`.
 
 #### Config
 

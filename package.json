@@ -5,7 +5,8 @@
     "scripts": {
         "dev": "next",
         "build": "next build",
-        "start": "next start",
+        "build:container": "docker build . -t nats-api-client-sse:0.1.0",
+        "start": "node nextHooklessStart.js",
         "lint": "next lint && tsc"
     },
     "dependencies": {
