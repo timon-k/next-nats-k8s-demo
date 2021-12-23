@@ -1,0 +1,12 @@
+serverRuntimeConfig:
+    nats:
+        # Assumes that the NATS server is running on the host, uses the docker-internal DNS name
+        # of the host (`host.docker.internal`). This will only work in local development tests.
+        server: nats://host.docker.internal:4222
+    logging:
+        transport:
+            # Only to be used for local developer runs, omit in production to log in JSON.
+            target: pino-pretty
+
+publicRuntimeConfig:
+    staticFolder: /static

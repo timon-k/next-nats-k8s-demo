@@ -7,6 +7,7 @@
         "build": "next build",
         "build:container": "docker build . -t nats-api-client-sse:0.1.0",
         "start": "node nextHooklessStart.js",
+        "start:container": "docker run --mount type=bind,source=$pwd/conf,target=/app/conf -e SERVICE_CONFIG_FILE=/app/conf/config.local-docker.yaml -p 3000:3000 --rm nats-api-client-sse:0.1.0",
         "lint": "next lint && tsc"
     },
     "dependencies": {

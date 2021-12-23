@@ -94,3 +94,20 @@ dependencies (both other than WebSockets).
 There is a limit of 6 concurrent SSE sessions to the same host in HTTP 1.X, so once we hit that
 limit, we have to set up an HTTP2 ingress in the Kubernetes deployment to bypass this. But for
 now, we only need a single SSE connection per client / browser.
+
+### Containerization
+
+We follow the [next.js Dockerfile example][next-docker] for a manual container build. In an actual
+development setup, the containers should be built by the CI with a unique version based on the
+output of `git describe`. 
+
+In this toy example, the container build is manual via `npm run build:container`.
+
+To run the container, you need to have a nats server running locally on the default port (4222)
+and (if on Windows) configure your shell to use bash or Powershell. Example for this:
+
+```
+npm config set script-shell "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe"
+```
+
+Once this was done and the container was built, use `npm run start:container` to start it.
