@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ReactElement, useEffect } from "react";
+import { ReactElement, useEffect, useReducer, useState } from "react";
 import { LoginData } from "../modules/LoginData";
 import { ChatEvent } from "../modules/Message";
 
@@ -22,19 +22,20 @@ function chatEventElement(event: ChatEvent): ReactElement {
 }
 
 export default function ChatMessages(props: { login: LoginData }): ReactElement {
-    const [chatEvents, setChatEvents] = React.useState([] as ChatEvent[]);
-    const [error, setError] = React.useState(false);
+    const [chatEvents, addChatEvent] = useReducer(
+        (s: ChatEvent[], a: ChatEvent) => [a].concat(s),
+        [] as ChatEvent[],
+    );
+    const [error, setError] = useState(false);
 
     useEffect(() => {
         const sse = new EventSource(
             `./api/${props.login.chatroom}?username=${props.login.username}`,
             { withCredentials: true },
         );
-        let sseEvents: ChatEvent[] = [];
 
         sse.onmessage = (e) => {
-            sseEvents = [JSON.parse(e.data as string) as ChatEvent].concat(sseEvents);
-            setChatEvents(sseEvents);
+            addChatEvent(JSON.parse(e.data as string) as ChatEvent);
         };
         sse.onerror = () => {
             setError(true);
@@ -43,7 +44,7 @@ export default function ChatMessages(props: { login: LoginData }): ReactElement 
         return () => {
             sse.close();
         };
-    }, [props.login]);
+    }, [props.login, addChatEvent]);
 
     if (error) {
         return <div>Could not connect to server</div>;
