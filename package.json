@@ -1,5 +1,5 @@
 {
-    "name": "nats-api-client-sse",
+    "name": "next-nats-k8s",
     "version": "0.1.0",
     "private": true,
     "scripts": {

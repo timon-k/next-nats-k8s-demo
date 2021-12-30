@@ -1,13 +1,28 @@
-# Next.js + NATS + Protobuf + Typescript demo ap
+# next-nats-k8s chat demo app
 
-This is a toy example of a chat application which shows how to integrate a Next.js app with
-a backend when the communication with the back-end is done via protobuf messages over NATS.
+This is a toy chat application which serves as a technical showcase to demonstrate
+
+- how to integrate a Next.js back-end with streaming data coming from a back-end where
+    - the backend is connected via NATS and uses both ephemeral (NATS) as well as persistent
+      (JetStream) messaging
+    - protobuf messages are used to communicate with the back-end.
+- how to reliably connect the browser / client-side of Next.js to the streaming data in the
+  back end using server-sent events (SSE).
+- how to read a runtime service configuration in YAML format in a Next.js back-end.
+- how to deploy the whole application to Kubernetes.
+
+The app sends all messages between the users as ephemeral messages, i.e., a user who logs into
+an existing chatroom does not see previous messages. Metadata like user logins/logouts are sent
+as persistent messages, so that users can see who is logged in.
+
+In this chat context we could have just as well made all of the messages persistent. The split 
+was made here, in order to be able to showcase how to mix both types of communication under one
+single client-facing SSE stream.
 
 To add:
 
 - Protobuf integration
 - K8s deployment
-- HTTP/2 ingress for K8s
 
 ## First steps
 
@@ -28,6 +43,9 @@ This is just a simple prototype, some aspects are definitively not production-re
   in a real-world setup.
 - JetStream subscriptions are left dangling (dangling consumers) in case of next.js server
   terminations (the SSE stream should be closed properly in this case, currently it is not).
+- Under HTTP1.X each client can only have a maximum of 5 SSE sessions with the same host.
+  Not a problem for our chat app (since it only has one SSE connection anyways), but in real
+  deployments you would want to circumvent this problem by using a HTTP/2 ingress for K8s.
 
 ## Design decisions
 
