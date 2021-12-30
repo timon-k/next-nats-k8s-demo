@@ -25,15 +25,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(200);
         res.write(`\n`);
 
-        const subscription = await subscribeToRoom(room);
+        const username = req.query.username as string;
+        if (!username) {
+            throw new Error("Missing username parameter!");
+        }
+
+        const subscription = await subscribeToRoom({
+            username: username,
+            chatroom: room,
+        });
+
+        req.socket.on("close", () => {
+            (async () => subscription.unsubscribe())();
+            res.end();
+        });
+
         for await (const message of subscription) {
             res.write(`event: message\n`);
             res.write(`data: ${JSON.stringify(message)}\n\n`);
         }
-
-        req.on("close", () => {
-            subscription.unsubscribe();
-            res.end();
-        });
     }
 }

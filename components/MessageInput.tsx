@@ -1,14 +1,21 @@
 import { Dispatch, ReactElement, SetStateAction, useState } from "react";
 import { LoginData } from "../modules/LoginData";
+import { Message } from "../modules/Message";
 
 function postMessage(
     login: LoginData,
     message: string,
     textfieldSetter: Dispatch<SetStateAction<string>>,
 ) {
+    const messageObject: Message = {
+        username: login.username,
+        message: message,
+        type: "message",
+    };
+
     return fetch(`./api/${login.chatroom}`, {
         method: "POST",
-        body: JSON.stringify({ username: login.username, message: message }),
+        body: JSON.stringify(messageObject),
         headers: {
             "Content-Type": "application/json",
         },

@@ -1,5 +1,5 @@
 import shutdownHook from "shutdown-hook";
 
-export const hook = new shutdownHook();
+export const commonShutdownHook = new shutdownHook();
 
-hook.register();
+commonShutdownHook.register();

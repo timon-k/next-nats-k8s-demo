@@ -5,10 +5,29 @@ a backend when the communication with the back-end is done via protobuf messages
 
 To add:
 
-- NATS JetStream integration
 - Protobuf integration
 - K8s deployment
 - HTTP/2 ingress for K8s
+
+## First steps
+
+- `npm install`
+- Run a NATS 2.X server with JetStream enabled, e.g., `docker run --rm -p 4222:4222 nats:2.6.6 -js`
+- `npm run dev`
+- Visit `http://localhost:3000` and enter chat messages (from one or multiple browsers)
+- Log on and off and see that metadata is persisted in NATS JetStream, whereas messages
+  are not.
+- Restart the server and log in again to be sure that metadata persistence works.
+
+## Limits
+
+This is just a simple prototype, some aspects are definitively not production-ready:
+
+- User authentication is not done at all for now, the REST calls to the back-end just supply
+  the username as a URL parameter (GET) or content (POST). This would certainly be different
+  in a real-world setup.
+- JetStream subscriptions are left dangling (dangling consumers) in case of next.js server
+  terminations (the SSE stream should be closed properly in this case, currently it is not).
 
 ## Design decisions
 

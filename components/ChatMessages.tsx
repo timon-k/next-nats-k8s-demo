@@ -1,19 +1,40 @@
 import * as React from "react";
 import { ReactElement, useEffect } from "react";
 import { LoginData } from "../modules/LoginData";
-import { Message } from "../modules/Message";
+import { ChatEvent } from "../modules/Message";
+
+function chatEventElement(event: ChatEvent): ReactElement {
+    switch (event.type) {
+        case "message":
+            return (
+                <>
+                    <i>{event.username}</i> {event.message}
+                </>
+            );
+        case "login":
+            return <i>{event.username} joined the room</i>;
+        case "logout":
+            return <i>{event.username} left the room</i>;
+        default:
+            console.error(`Received message of unknown type: ${event}`);
+            return <></>;
+    }
+}
 
 export default function ChatMessages(props: { login: LoginData }): ReactElement {
-    const [messages, setMessages] = React.useState([] as Message[]);
+    const [chatEvents, setChatEvents] = React.useState([] as ChatEvent[]);
     const [error, setError] = React.useState(false);
 
     useEffect(() => {
-        const sse = new EventSource(`./api/${props.login.chatroom}`);
-        let sseMessages: Message[] = [];
+        const sse = new EventSource(
+            `./api/${props.login.chatroom}?username=${props.login.username}`,
+            { withCredentials: true },
+        );
+        let sseEvents: ChatEvent[] = [];
 
         sse.onmessage = (e) => {
-            sseMessages = [JSON.parse(e.data as string) as Message].concat(sseMessages);
-            setMessages(sseMessages);
+            sseEvents = [JSON.parse(e.data as string) as ChatEvent].concat(sseEvents);
+            setChatEvents(sseEvents);
         };
         sse.onerror = () => {
             setError(true);
@@ -22,16 +43,16 @@ export default function ChatMessages(props: { login: LoginData }): ReactElement 
         return () => {
             sse.close();
         };
-    }, [props.login.chatroom]);
+    }, [props.login]);
 
     if (error) {
         return <div>Could not connect to server</div>;
-    } else if (messages.length > 0) {
+    } else if (chatEvents.length > 0) {
         return (
             <div>
-                {messages.map((item, index) => (
+                {chatEvents.map((item, index) => (
                     <div key={index}>
-                        <i>{item.username}</i> {item.message} <br />
+                        {chatEventElement(item)} <br />
                     </div>
                 ))}
             </div>

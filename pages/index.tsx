@@ -4,18 +4,18 @@ import MessageInput from "../components/MessageInput";
 import { LoginData } from "../modules/LoginData";
 
 export default function HomePage(): ReactElement {
-    const undefinedLoginData = { username: undefined, chatroom: undefined };
-    const [loginData, setLoginData] = useState<LoginData>(undefinedLoginData);
+    const [loginData, setLoginData] = useState<LoginData | undefined>(undefined);
 
     const [username, setUsername] = useState<string>("");
     const [chatroom, setChatroom] = useState<string>("");
+    const isValidLoginData = username && chatroom;
 
-    if (loginData.username) {
+    if (loginData) {
         return (
             <div>
                 <h1>
                     Welcome to chatroom {loginData.chatroom}, {loginData.username}! (
-                    <button onClick={() => setLoginData(undefinedLoginData)}>Logout</button>)
+                    <button onClick={() => setLoginData(undefined)}>Logout</button>)
                 </h1>
                 <MessageInput login={loginData} />
                 <p></p>
@@ -30,27 +30,33 @@ export default function HomePage(): ReactElement {
                     setLoginData({ username: username, chatroom: chatroom });
                 }}
             >
+                {/* Autofill has to be turned off, otherwise the onChange is not reliably triggered.
+                 *
+                 * https://stackoverflow.com/q/55244590
+                 */}
                 <h1>Log In</h1>
                 <p>
                     <input
-                        type="text"
+                        type="search"
                         name="username"
                         onChange={(e) => setUsername(e.target.value)}
                         placeholder="Username"
                         value={username}
+                        autoComplete="off"
                     />
                 </p>
                 <p>
                     <input
-                        type="text"
+                        type="search"
                         name="chatroom"
                         onChange={(e) => setChatroom(e.target.value)}
                         placeholder="Chatroom"
                         value={chatroom}
+                        autoComplete="off"
                     />
                 </p>
                 <p>
-                    <input type="submit" value="Submit" />
+                    <input type="submit" value="Submit" disabled={!isValidLoginData} />
                 </p>
             </form>
         );

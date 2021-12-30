@@ -1,4 +1,4 @@
 export type LoginData = {
-    username: string | undefined;
-    chatroom: string | undefined;
+    username: string;
+    chatroom: string;
 };
