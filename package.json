@@ -68,7 +68,6 @@
         }
     },
     "eslintIgnore": [
-        ".next",
-        "**/*.validator.ts"
+        ".next"
     ]
 }
