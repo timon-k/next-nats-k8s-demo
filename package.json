@@ -1,5 +1,5 @@
 {
-    "name": "next-nats-k8s",
+    "name": "next-nats-k8s-demo",
     "version": "0.1.0",
     "private": true,
     "scripts": {

@@ -1,4 +1,4 @@
-# next-nats-k8s chat demo app
+# next-nats-k8s-demo chat  app
 
 This is a toy chat application which serves as a technical showcase to demonstrate
 
@@ -36,7 +36,7 @@ To add:
 
 ## Limits
 
-This is just a simple prototype, some aspects are definitively not production-ready:
+This is just a simple prototype, aspects which are definitively not production-ready include
 
 - User authentication is not done at all for now, the REST calls to the back-end just supply
   the username as a URL parameter (GET) or content (POST). This would certainly be different
