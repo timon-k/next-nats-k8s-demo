@@ -1,5 +1,5 @@
 import pino from "pino";
-import { getTypedConfig } from "./config";
+import { getTypedConfig } from "./Config";
 
 const { serverRuntimeConfig } = getTypedConfig();
 

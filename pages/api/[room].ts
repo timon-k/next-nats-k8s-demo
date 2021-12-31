@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { publishToRoom, subscribeToRoom } from "../../modules/backEnd/natsConnection";
+import { publishToRoom, subscribeToRoom } from "../../modules/backEnd/NatsConnection";
 
 /**
  * The main API route of this app.

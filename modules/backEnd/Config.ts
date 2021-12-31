@@ -1,6 +1,6 @@
 import Ajv, { JSONSchemaType } from "ajv";
 import getConfig from "next/config";
-import schema from "./config.schema.json";
+import schema from "./Config.schema.json";
 
 /** A typed view on our next.js config object.
  *

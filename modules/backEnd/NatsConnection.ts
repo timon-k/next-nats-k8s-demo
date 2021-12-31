@@ -2,9 +2,9 @@ import { connect, createInbox, JsMsg, Msg, NatsConnection, StringCodec } from "n
 import { consumerOpts } from "nats/lib/nats-base-client/jsconsumeropts";
 import { LoginData } from "../LoginData";
 import { ChatEvent, Message, UserLogin, UserLogout } from "../Message";
-import { getTypedConfig } from "./config";
-import { logger } from "./logger";
-import { commonShutdownHook } from "./shutdown";
+import { getTypedConfig } from "./Config";
+import { logger } from "./Logger";
+import { commonShutdownHook } from "./Shutdown";
 
 const { serverRuntimeConfig } = getTypedConfig();
 
