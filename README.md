@@ -22,7 +22,6 @@ single client-facing SSE stream.
 To add:
 
 - Protobuf integration
-- K8s deployment
 
 ## First steps
 
@@ -33,6 +32,13 @@ To add:
 - Log on and off and see that metadata is persisted in NATS JetStream, whereas messages
   are not.
 - Restart the server and log in again to be sure that metadata persistence works.
+- Assuming you have access to a Kubernetes cluster:
+  - Install the [nginx ingress](https://kubernetes.github.io/ingress-nginx/deploy/) in your cluster
+  - Check that the ingress pods are running via `kubectl get pods --namespace=ingress-nginx`
+  - Deploy the app + NATS + ingress via `kubectl apply -f k8s-deployment.yaml`
+  - Open a port-forwarding into your cluster via 
+    `kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8080:80`
+  - Open `http://localhost:8080` in a browser.
 
 ## Limits
 
@@ -46,6 +52,8 @@ This is just a simple prototype, aspects which are definitively not production-r
 - Under HTTP1.X each client can only have a maximum of 5 SSE sessions with the same host.
   Not a problem for our chat app (since it only has one SSE connection anyways), but in real
   deployments you would want to circumvent this problem by using a HTTP/2 ingress for K8s.
+- The whole Kubernetes deployment is just quick & dirty sketch. Actual deployments would at
+  least configure replication and persistence for NATS.
 
 ## Design decisions
 

@@ -2,6 +2,7 @@ serverRuntimeConfig:
     nats:
         server: nats://127.0.0.1:4222
     logging:
+        level: info
         transport:
             # Only to be used for local developer runs, omit in production to log in JSON.
             target: pino-pretty

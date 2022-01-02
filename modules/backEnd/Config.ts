@@ -44,6 +44,6 @@ export function getTypedConfig(): TypedNextConfig {
     if (validate(rawConfig)) {
         return rawConfig;
     } else {
-        throw new Error(validate.errors?.toString());
+        throw new Error(JSON.stringify(validate.errors));
     }
 }
