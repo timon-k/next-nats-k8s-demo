@@ -10,7 +10,9 @@ import schema from "./Config.schema.json";
  *
  * See section "JSON valiation" in `README.md`.
  */
-export interface TypedNextConfig {
+export interface TypedNextConfig extends TypedServerConfig, TypedClientConfig {}
+
+export interface TypedServerConfig {
     serverRuntimeConfig: {
         nats: {
             server: string;
@@ -30,8 +32,12 @@ export interface TypedNextConfig {
             };
         };
     };
+}
+
+export interface TypedClientConfig {
     publicRuntimeConfig: {
         version: string;
+        basePath: string;
         staticFolder: string;
     };
 }
@@ -39,11 +45,24 @@ export interface TypedNextConfig {
 const ajv = new Ajv();
 const validate = ajv.compile(schema as JSONSchemaType<TypedNextConfig>);
 
+/** Get the full validated config.
+ *
+ * Only works at server-side, since part of the config is empty for the client-side. */
 export function getTypedConfig(): TypedNextConfig {
     const rawConfig = getConfig();
     if (validate(rawConfig)) {
         return rawConfig;
     } else {
-        throw new Error(JSON.stringify(validate.errors));
+        throw new Error(JSON.stringify(validate.errors, undefined, 2));
     }
+}
+
+/** Get the client-side config.
+ *
+ * We do not validate it here again, since validation is already done at the server side
+ * and since we would need to further complicate the JSON schema in order to be able to
+ * validate both config versions (with and without server-side parts).
+ */
+export function getTypedClientConfig(): TypedClientConfig {
+    return getConfig() as TypedClientConfig;
 }

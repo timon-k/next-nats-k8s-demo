@@ -1,7 +1,10 @@
 import * as React from "react";
 import { ReactElement, useEffect, useReducer, useState } from "react";
+import { getTypedClientConfig } from "../modules/backEnd/Config";
 import { LoginData } from "../modules/LoginData";
 import { ChatEvent } from "../modules/Message";
+
+const config = getTypedClientConfig().publicRuntimeConfig;
 
 function chatEventElement(event: ChatEvent): ReactElement {
     switch (event.type) {
@@ -30,7 +33,7 @@ export default function ChatMessages(props: { login: LoginData }): ReactElement 
 
     useEffect(() => {
         const sse = new EventSource(
-            `./api/${props.login.chatroom}?username=${props.login.username}`,
+            `${config.basePath}/api/${props.login.chatroom}?username=${props.login.username}`,
             { withCredentials: true },
         );
 

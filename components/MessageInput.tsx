@@ -1,6 +1,9 @@
 import { Dispatch, ReactElement, SetStateAction, useState } from "react";
+import { getTypedClientConfig } from "../modules/backEnd/Config";
 import { LoginData } from "../modules/LoginData";
 import { Message } from "../modules/Message";
+
+const config = getTypedClientConfig().publicRuntimeConfig;
 
 function postMessage(
     login: LoginData,
@@ -13,7 +16,7 @@ function postMessage(
         type: "message",
     };
 
-    return fetch(`./api/${login.chatroom}`, {
+    return fetch(`${config.basePath}/api/${login.chatroom}`, {
         method: "POST",
         body: JSON.stringify(messageObject),
         headers: {

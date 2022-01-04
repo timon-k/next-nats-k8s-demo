@@ -6,7 +6,12 @@ const yamlConfig = load(
     readFileSync(process.env.SERVICE_CONFIG_FILE ?? "./conf/config.yaml", "utf-8"),
 );
 
+// Must be kept in sync with the k8s ingress path in `k8s-deployment.yaml`
+const basePath = "/chat";
+
 module.exports = {
+    basePath: basePath,
+
     reactStrictMode: true,
 
     eslint: {
@@ -18,6 +23,7 @@ module.exports = {
         ...yamlConfig.publicRuntimeConfig,
         ...{
             version,
+            basePath,
         },
     },
 };

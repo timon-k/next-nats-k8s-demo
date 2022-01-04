@@ -28,25 +28,27 @@ To add:
 - `npm install`
 - Run a NATS 2.X server with JetStream enabled, e.g., `docker run --rm -p 4222:4222 nats:2.6.6 -js`
 - `npm run dev`
-- Visit `http://localhost:3000` and enter chat messages (from one or multiple browsers)
+- Visit `http://localhost:3000/chat` and enter chat messages (from one or multiple browsers)
 - Log on and off and see that metadata is persisted in NATS JetStream, whereas messages
   are not.
 - Restart the server and log in again to be sure that metadata persistence works.
 - Assuming you have access to a Kubernetes cluster:
-  - Install the [nginx ingress](https://kubernetes.github.io/ingress-nginx/deploy/) in your cluster
-  - Check that the ingress pods are running via `kubectl get pods --namespace=ingress-nginx`
-  - Deploy the app + NATS + ingress via `kubectl apply -f k8s-deployment.yaml`
-  - Open a port-forwarding into your cluster via 
-    `kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8080:80`
-  - Open `http://localhost:8080` in a browser.
+    - Install the [nginx ingress](https://kubernetes.github.io/ingress-nginx/deploy/) in your cluster
+    - Check that the ingress pods are running via `kubectl get pods --namespace=ingress-nginx`
+    - Deploy the app + NATS + ingress via `kubectl apply -f k8s-deployment.yaml`
+    - Open `http://localhost/chat` in a browser.
+        - If this does not work you have to open a `port-forward` into your cluster as detailed
+          in the [nginx ingress docs][nginx-ingress].
+
+[nginx-ingress]: https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop
 
 ## Limits
 
 This is just a simple prototype, aspects which are definitively not production-ready include
 
 - User authentication is not done at all for now, the REST calls to the back-end just supply
-  the username as a URL parameter (GET) or content (POST). This would certainly be different
-  in a real-world setup.
+  the username as a URL parameter (GET) or content (POST). A real-world setup would use one
+  of the [next.js authentication ptterns][next-auth].
 - JetStream subscriptions are left dangling (dangling consumers) in case of next.js server
   terminations (the SSE stream should be closed properly in this case, currently it is not).
 - Under HTTP1.X each client can only have a maximum of 5 SSE sessions with the same host.
@@ -54,6 +56,8 @@ This is just a simple prototype, aspects which are definitively not production-r
   deployments you would want to circumvent this problem by using a HTTP/2 ingress for K8s.
 - The whole Kubernetes deployment is just quick & dirty sketch. Actual deployments would at
   least configure replication and persistence for NATS.
+
+[next-auth]: https://nextjs.org/docs/authentication
 
 ## Design decisions
 
@@ -85,6 +89,14 @@ the applicable runtime configuration into this file.
 
 We use YAML as the general configuration language for the k8s services, so here we parse a YAML
 config file and expose its content through the next.js config.
+
+One thing which we would really like to have run-time-configuable is the base path, so that we
+could later decide to serve the application from `/chat` even though it was built to be served
+from `/`. Unfortunately, next.js does _not_ allow this, since the [`basePath` option][basepath]
+needs to be set at _build_ time. That means, our next build and our k8s ingress config _must_ be
+kept in sync.
+
+[basepath]: https://nextjs.org/docs/api-reference/next.config.js/basepath
 
 ### Validaton
 
