@@ -154,6 +154,8 @@ We follow the [next.js Dockerfile example][next-docker] for a manual container b
 development setup, the containers should be built by the CI with a unique version based on the
 output of `git describe`. 
 
+[next-docker]: https://nextjs.org/docs/deployment
+
 In this toy example, the container build is manual via `npm run build:container`.
 
 To run the container, you need to have a nats server running locally on the default port (4222)
@@ -173,6 +175,10 @@ idiomatic Typescript code than using the [default JS plugin][proto-js] in conjun
 
 It also looks comprehensive functionality-wise and mature enough to be used, especially concerning
 the handling of the quite complicated [protobuf field presence][presence].
+
+To keep things simple, the proto files are directly contained in the source folders and the
+generated sources are committed to the repo. Re-generation is a manual step via 
+`npm run generate-proto`.
 
 [ts-proto]: https://github.com/stephenh/ts-proto
 [proto-js]: https://developers.google.com/protocol-buffers/docs/reference/javascript-generated
