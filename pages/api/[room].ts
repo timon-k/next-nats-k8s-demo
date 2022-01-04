@@ -40,9 +40,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             res.end();
         });
 
-        for await (const message of subscription) {
+        for await (const event of subscription) {
             res.write(`event: message\n`);
-            res.write(`data: ${JSON.stringify(message)}\n\n`);
+            res.write(`data: ${JSON.stringify(event)}\n\n`);
         }
     }
 }

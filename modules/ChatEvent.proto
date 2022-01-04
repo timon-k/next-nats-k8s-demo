@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package chat;
+
+message Message {
+    string username = 1;
+    string message = 2;
+};
+
+message UserLogin {
+    string username = 1;
+};
+
+message UserLogout {
+    string username = 1;
+};
+
+message ChatEvent {
+    oneof chat_event {
+        Message message = 1;
+        UserLogin login = 2;
+        UserLogout logout = 3;
+    }
+};

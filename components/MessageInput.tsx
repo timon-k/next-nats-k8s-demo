@@ -1,7 +1,7 @@
 import { Dispatch, ReactElement, SetStateAction, useState } from "react";
 import { getTypedClientConfig } from "../modules/backEnd/Config";
 import { LoginData } from "../modules/LoginData";
-import { Message } from "../modules/Message";
+import { Message } from "../modules/ChatEvent";
 
 const config = getTypedClientConfig().publicRuntimeConfig;
 
@@ -13,7 +13,6 @@ function postMessage(
     const messageObject: Message = {
         username: login.username,
         message: message,
-        type: "message",
     };
 
     return fetch(`${config.basePath}/api/${login.chatroom}`, {

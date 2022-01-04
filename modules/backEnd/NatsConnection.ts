@@ -1,7 +1,7 @@
-import { connect, createInbox, JsMsg, Msg, NatsConnection, StringCodec } from "nats";
+import { Codec, connect, createInbox, JsMsg, Msg, NatsConnection } from "nats";
 import { consumerOpts } from "nats/lib/nats-base-client/jsconsumeropts";
 import { LoginData } from "../LoginData";
-import { ChatEvent, Message, UserLogin, UserLogout } from "../Message";
+import { ChatEvent, Message } from "../ChatEvent";
 import { getTypedConfig } from "./Config";
 import { logger } from "./Logger";
 import { commonShutdownHook } from "./Shutdown";
@@ -86,7 +86,14 @@ type ChatRoomSubscription = {
     unsubscribe(): Promise<void>;
 };
 
-const sc = StringCodec();
+const eventCodec: Codec<ChatEvent> = {
+    encode: function (d: ChatEvent): Uint8Array {
+        return ChatEvent.encode(d).finish();
+    },
+    decode: function (a: Uint8Array): ChatEvent {
+        return ChatEvent.decode(a);
+    },
+};
 
 /** Combine multiple async iterables.
  *
@@ -154,11 +161,15 @@ export async function subscribeToRoom(login: LoginData): Promise<ChatRoomSubscri
     const jsMsgs = await js.subscribe(currentRoomMetaSubject, opts);
 
     // Announce own login
-    const ownLogin: UserLogin = {
-        type: "login",
-        username: login.username,
+    const ownLogin: ChatEvent = {
+        chatEvent: {
+            $case: "login",
+            login: {
+                username: login.username,
+            },
+        },
     };
-    await js.publish(currentRoomMetaSubject, sc.encode(JSON.stringify(ownLogin)));
+    await js.publish(currentRoomMetaSubject, eventCodec.encode(ownLogin));
 
     // Merge the JetStream and the normal NATS results in the result iterator
     return {
@@ -167,7 +178,7 @@ export async function subscribeToRoom(login: LoginData): Promise<ChatRoomSubscri
                 jsMsgs,
                 messageSubscription,
             ])) {
-                yield JSON.parse(sc.decode(plainEvent.data)) as ChatEvent;
+                yield eventCodec.decode(plainEvent.data);
             }
         },
         unsubscribe: async function (): Promise<void> {
@@ -175,16 +186,26 @@ export async function subscribeToRoom(login: LoginData): Promise<ChatRoomSubscri
             await jsMsgs.destroy();
 
             // Announce own logout
-            const ownLogout: UserLogout = {
-                type: "logout",
-                username: login.username,
+            const ownLogout: ChatEvent = {
+                chatEvent: {
+                    $case: "logout",
+                    logout: {
+                        username: login.username,
+                    },
+                },
             };
-            await js.publish(currentRoomMetaSubject, sc.encode(JSON.stringify(ownLogout)));
+            await js.publish(currentRoomMetaSubject, eventCodec.encode(ownLogout));
         },
     };
 }
 
 export async function publishToRoom(chatroomName: string, message: Message): Promise<void> {
     const conn = await connectToNatsServer();
-    conn.publish(getChatroomMessageSubject(chatroomName), sc.encode(JSON.stringify(message)));
+    const event: ChatEvent = {
+        chatEvent: {
+            $case: "message",
+            message: message,
+        },
+    };
+    conn.publish(getChatroomMessageSubject(chatroomName), eventCodec.encode(event));
 }

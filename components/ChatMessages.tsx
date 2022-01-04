@@ -2,22 +2,26 @@ import * as React from "react";
 import { ReactElement, useEffect, useReducer, useState } from "react";
 import { getTypedClientConfig } from "../modules/backEnd/Config";
 import { LoginData } from "../modules/LoginData";
-import { ChatEvent } from "../modules/Message";
+import { ChatEvent } from "../modules/ChatEvent";
 
 const config = getTypedClientConfig().publicRuntimeConfig;
 
 function chatEventElement(event: ChatEvent): ReactElement {
-    switch (event.type) {
+    if (!event.chatEvent) {
+        return <></>;
+    }
+
+    switch (event.chatEvent?.$case) {
         case "message":
             return (
                 <>
-                    <i>{event.username}</i> {event.message}
+                    <i>{event.chatEvent.message.username}</i> {event.chatEvent.message.message}
                 </>
             );
         case "login":
-            return <i>{event.username} joined the room</i>;
+            return <i>{event.chatEvent.login.username} joined the room</i>;
         case "logout":
-            return <i>{event.username} left the room</i>;
+            return <i>{event.chatEvent.logout.username} left the room</i>;
         default:
             console.error(`Received message of unknown type: ${event}`);
             return <></>;

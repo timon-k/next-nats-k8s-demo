@@ -19,10 +19,6 @@ In this chat context we could have just as well made all of the messages persist
 was made here, in order to be able to showcase how to mix both types of communication under one
 single client-facing SSE stream.
 
-To add:
-
-- Protobuf integration
-
 ## First steps
 
 - `npm install`
@@ -168,3 +164,17 @@ npm config set script-shell "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershe
 ```
 
 Once this was done and the container was built, use `npm run start:container` to start it.
+
+### Protobuf integration
+
+For the protobuf integration we chose the [ts-proto plugin][ts-proto], since it enables more 
+idiomatic Typescript code than using the [default JS plugin][proto-js] in conjunction with a
+[`d.ts` file generator][dts-generator].
+
+It also looks comprehensive functionality-wise and mature enough to be used, especially concerning
+the handling of the quite complicated [protobuf field presence][presence].
+
+[ts-proto]: https://github.com/stephenh/ts-proto
+[proto-js]: https://developers.google.com/protocol-buffers/docs/reference/javascript-generated
+[dts-generator]: https://github.com/agreatfool/grpc_tools_node_protoc_ts
+[presence]: https://github.com/protocolbuffers/protobuf/blob/master/docs/field_presence.md

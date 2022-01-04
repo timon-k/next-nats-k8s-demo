@@ -3,6 +3,9 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
+        "generate-proto": "run-script-os",
+        "generate-proto:darwin:linux": "npx protoc --plugin=protoc-gen-ts_proto=./node_modules/.bin/protoc-gen-ts_proto --proto_path=modules --ts_proto_out=modules --ts_proto_opt=esModuleInterop=true --ts_proto_opt=oneof=unions ChatEvent.proto",
+        "generate-proto:win32": "npx protoc --plugin=protoc-gen-ts_proto=.\\node_modules\\.bin\\protoc-gen-ts_proto.cmd --proto_path=modules --ts_proto_out=modules --ts_proto_opt=esModuleInterop=true --ts_proto_opt=oneof=unions ChatEvent.proto",
         "dev": "next",
         "build": "next build",
         "build:container": "docker build . -t next-nats-k8s-demo:0.1.0",
@@ -18,10 +21,12 @@
         "pino": "^7.5.1",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
-        "shutdown-hook": "^1.1.8"
+        "shutdown-hook": "^1.1.8",
+        "ts-proto": "^1.97.0"
     },
     "devDependencies": {
         "@next/eslint-plugin-next": "12.0.7",
+        "@protobuf-ts/protoc": "^2.1.0",
         "@types/js-yaml": "^4.0.5",
         "@types/node": "^16.11.13",
         "@types/react": "^17.0.2",
@@ -34,6 +39,7 @@
         "eslint-plugin-prettier": "^4.0.0",
         "pino-pretty": "^7.3.0",
         "prettier": "2.5.1",
+        "run-script-os": "^1.1.6",
         "typescript": "^4.5.4"
     },
     "prettier": {
